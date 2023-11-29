@@ -1,20 +1,88 @@
 import {Request, Response} from 'express'
+import Product from '../models/product'
 
-export const getProducts = (req: Request, res: Response) => {
+export const getProducts = async(req: Request, res: Response) => {
 
-    res.json({
-        msg: 'Get products'
-    })
+    const listproducts = await Product.findAll()
+
+    res.json(listproducts)
 
 }
 
-export const getProduct  = (req: Request, res: Response) => {
+export const getProduct  = async (req: Request, res: Response) => {
 
     const { id } = req.params;
+    const product = await Product.findByPk(id)
 
-    res.json({
-        msg: 'Get products',
-        id: id
-    })
+    if(product){
+        res.json(product)
+    } else {
+        res.json({
+            msg:'Product doesn´t exists'
+        })
+    }
 
+}
+
+export const addProduct  = async (req: Request, res: Response) => {
+
+    const { body } = req;
+
+    try {
+        await Product.create(body);
+
+        res.json({
+            msg: 'Product added'
+        })
+    } catch (error) {
+        res.json({
+            msg:'Error adding new product'
+        })
+    }
+}
+
+export const updateProduct  = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    const { body } = req;
+
+    try {
+        const product = await Product.findByPk(id);
+
+        if(product){     
+            await product.update(body);
+            res.json({
+                msg:'Product updated'
+            })    
+        }else{    
+            res.status(404).json({
+                msg:'Product doesn´t exists'
+            })    
+       }
+    
+    } catch (error) {
+        res.json({
+            msg:'Error updating product'
+        })
+    }
+   
+}
+
+export const deleteProduct  = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    const product = await Product.findByPk(id);
+
+    if(!product){
+        res.status(404).json({
+            msg: 'Product doesn´t exists'
+        })
+    }else{
+        await product.destroy();
+        res.json({
+            msg: 'Product deleted'
+        })
+    }
+
+    
 }

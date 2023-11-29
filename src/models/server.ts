@@ -1,5 +1,6 @@
 import express, {Application, Request, Response} from 'express';
 import routesProduct from '../routes/product';
+import db from '../db/connection'
 
 class Server {
     private app: Application;
@@ -9,7 +10,9 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '3001';
         this.listen();
+        this.midlewares();
         this.routes();
+        this.dbConnect();
     }
 
     listen(){
@@ -27,6 +30,29 @@ class Server {
 
         this.app.use('/api/productos', routesProduct)
     }
+
+    midlewares(){
+
+        //Parseamos el body
+        this.app.use(express.json());
+
+    }
+
+    async dbConnect(){
+
+       try {
+
+        await db.authenticate();
+        console.log("Database connected");
+
+        
+       } catch (error) {
+        
+        console.log("Error: "+error);
+
+       }
+    }
+    
 
 }
 
