@@ -1,7 +1,9 @@
-import express, {Application, Request, Response} from 'express';
-import cors from  'cors'
+import express, { Application, Request, Response} from 'express';
+import cors from  'cors';
 import routesProduct from '../routes/product';
-import db from '../db/connection'
+import routesCategory from '../routes/category';
+import routesMaker from '../routes/maker';
+import db from '../db/connection';
 
 class Server {
     private app: Application;
@@ -29,7 +31,9 @@ class Server {
             }) 
         })
 
-        this.app.use('/api/productos', routesProduct)
+        this.app.use('/api/products', routesProduct)
+        this.app.use('/api/categorys', routesCategory)
+        this.app.use('/api/makers', routesMaker)
     }
 
     midlewares(){

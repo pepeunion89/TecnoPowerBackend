@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const maker_1 = require("../controllers/maker");
+const router = (0, express_1.Router)();
+router.get('/', maker_1.getMakers);
+router.get('/:id', maker_1.getMaker);
+router.post('/', maker_1.addMaker);
+router.put('/:id', maker_1.updateMaker);
+router.delete('/:id', maker_1.deleteMaker);
+exports.default = router;
