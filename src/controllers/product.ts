@@ -28,13 +28,21 @@ export const addProduct  = async (req: Request, res: Response) => {
 
     const { body } = req;
 
+    console.log(body);
+
     try {
         await Product.create(body);
+        console.log("LO CREO EN TEORIA");
 
         res.json({
             msg: 'Product added'
+            //msg: body
         })
     } catch (error) {
+        console.log("NO PAPU NO ENTRO, MIRA EL ERROR: ");
+        console.log("====================================================");
+        console.log(error);
+        console.log("====================================================");
         res.json({
             msg:'Error adding new product'
         })

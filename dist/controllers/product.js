@@ -34,13 +34,20 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getProduct = getProduct;
 const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
+    console.log(body);
     try {
         yield product_1.default.create(body);
+        console.log("LO CREO EN TEORIA");
         res.json({
             msg: 'Product added'
+            //msg: body
         });
     }
     catch (error) {
+        console.log("NO PAPU NO ENTRO, MIRA EL ERROR: ");
+        console.log("====================================================");
+        console.log(error);
+        console.log("====================================================");
         res.json({
             msg: 'Error adding new product'
         });

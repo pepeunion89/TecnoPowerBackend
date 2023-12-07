@@ -17,6 +17,7 @@ const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
 const category_1 = __importDefault(require("../routes/category"));
 const maker_1 = __importDefault(require("../routes/maker"));
+const tag_1 = __importDefault(require("../routes/tag"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
     constructor() {
@@ -41,6 +42,7 @@ class Server {
         this.app.use('/api/products', product_1.default);
         this.app.use('/api/categorys', category_1.default);
         this.app.use('/api/makers', maker_1.default);
+        this.app.use('/api/tags', tag_1.default);
     }
     midlewares() {
         //Parseamos el body

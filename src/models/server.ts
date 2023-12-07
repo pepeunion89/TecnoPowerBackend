@@ -3,6 +3,7 @@ import cors from  'cors';
 import routesProduct from '../routes/product';
 import routesCategory from '../routes/category';
 import routesMaker from '../routes/maker';
+import routesTags from '../routes/tag';
 import db from '../db/connection';
 
 class Server {
@@ -34,6 +35,7 @@ class Server {
         this.app.use('/api/products', routesProduct)
         this.app.use('/api/categorys', routesCategory)
         this.app.use('/api/makers', routesMaker)
+        this.app.use('/api/tags', routesTags)
     }
 
     midlewares(){

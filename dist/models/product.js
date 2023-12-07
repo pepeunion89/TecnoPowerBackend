@@ -5,74 +5,97 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-const tags_1 = __importDefault(require("./tags"));
-const maker_1 = __importDefault(require("./maker"));
-const category_1 = __importDefault(require("./category"));
 const Product = connection_1.default.define('Product', {
     product_name: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    description: {
-        type: sequelize_1.DataTypes.STRING
-    },
-    price: {
-        type: sequelize_1.DataTypes.DOUBLE
-    },
-    stock: {
-        type: sequelize_1.DataTypes.NUMBER
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     },
     img_url: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     },
-    categoryId: {
+    price: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: false
+    },
+    stock: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: category_1.default,
-            key: 'id'
-        }
+        allowNull: false
     },
-    makerId: {
-        type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: maker_1.default,
-            key: 'id'
-        }
+    description: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     },
-    tagIds: {
-        type: sequelize_1.DataTypes.ARRAY(sequelize_1.DataTypes.INTEGER),
+    // CATEGORY DEL PRODUCTO
+    category: {
+        type: sequelize_1.DataTypes.JSON(),
+        allowNull: false
+    },
+    // MAKER DEL PRODUCTO
+    maker: {
+        type: sequelize_1.DataTypes.JSON(),
+        allowNull: false
+    },
+    // COLORES DEL PRODUCTO
+    color1_name: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color1_hex: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color2_name: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color2_hex: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color3_name: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color3_hex: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color4_name: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color4_hex: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color5_name: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    color5_hex: {
+        type: sequelize_1.DataTypes.STRING(),
+        allowNull: true
+    },
+    // TAGS DEL PRODUCTO
+    tags: {
+        type: sequelize_1.DataTypes.JSON(),
+        allowNull: false
+    },
+    createdAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: false
+    },
+    updatedAt: {
+        type: sequelize_1.DataTypes.DATE,
         allowNull: false
     }
-}, {
-    createdAt: false,
-    updatedAt: false
 });
-// Define associations between models
-Product.belongsTo(category_1.default, { foreignKey: 'categoryId' });
-Product.belongsTo(maker_1.default, { foreignKey: 'makerId' });
-Product.belongsToMany(tags_1.default, {
-    through: 'ProductTag',
-    foreignKey: 'productId',
-    otherKey: 'tagId'
-});
-// Create the ProductTag table
-connection_1.default.define('ProductTag', {
-    productId: {
-        type: sequelize_1.DataTypes.INTEGER,
-        primaryKey: true,
-        references: {
-            model: Product,
-            key: 'id'
-        }
-    },
-    tagId: {
-        type: sequelize_1.DataTypes.INTEGER,
-        primaryKey: true,
-        references: {
-            model: tags_1.default,
-            key: 'id'
-        }
-    }
-});
+/*
+
+Este codigo sirve para cuando indexamos con los id de otras clases, si guardamos el objeto entero no tiene sentido indexar nada / JOINear
+
+Product.hasOne(Category);
+Product.hasOne(Maker);
+Product.hasMany(Tag);*/
 exports.default = Product;
