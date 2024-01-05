@@ -34,16 +34,38 @@ const getMaker = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getMaker = getMaker;
 const addMaker = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    try {
-        yield maker_1.default.create(body);
-        res.json({
-            msg: 'Maker added'
-        });
+    let flag = 0;
+    const listMakers = yield maker_1.default.findAll();
+    const makers = listMakers.map((maker) => {
+        return maker.toJSON();
+    });
+    for (let maker of makers) {
+        if (maker.maker_name === body.maker_name) {
+            flag = 1;
+        }
     }
-    catch (error) {
-        res.json({
-            msg: 'Error adding new maker'
-        });
+    if (flag === 1) {
+        try {
+            res.json({
+                msg: 'Maker already exists.'
+            });
+        }
+        finally {
+            // Nothing to do.
+        }
+    }
+    else {
+        try {
+            yield maker_1.default.create(body);
+            res.json({
+                msg: 'Maker added'
+            });
+        }
+        catch (error) {
+            res.json({
+                msg: 'Error adding new maker'
+            });
+        }
     }
 });
 exports.addMaker = addMaker;

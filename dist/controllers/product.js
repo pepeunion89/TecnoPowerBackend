@@ -34,23 +34,39 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getProduct = getProduct;
 const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    console.log(body);
-    try {
-        yield product_1.default.create(body);
-        console.log("LO CREO EN TEORIA");
-        res.json({
-            msg: 'Product added'
-            //msg: body
-        });
+    let flag = 0;
+    const listProducts = yield product_1.default.findAll();
+    const products = listProducts.map((product) => {
+        return product.toJSON();
+    });
+    for (let product of products) {
+        if (product.product_name === body.product_name) {
+            flag = 1;
+        }
     }
-    catch (error) {
-        console.log("NO PAPU NO ENTRO, MIRA EL ERROR: ");
-        console.log("====================================================");
-        console.log(error);
-        console.log("====================================================");
-        res.json({
-            msg: 'Error adding new product'
-        });
+    if (flag === 1) {
+        try {
+            res.json({
+                msg: 'Product already exists.'
+            });
+        }
+        finally {
+            // Nothing to do.
+        }
+    }
+    else {
+        try {
+            yield product_1.default.create(body);
+            res.json({
+                msg: 'Product added'
+                //msg: body
+            });
+        }
+        catch (error) {
+            res.json({
+                msg: 'Error adding new product'
+            });
+        }
     }
 });
 exports.addProduct = addProduct;

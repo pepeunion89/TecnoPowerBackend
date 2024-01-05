@@ -34,16 +34,45 @@ const getTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getTag = getTag;
 const addTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    try {
-        yield tags_1.default.create(body);
-        res.json({
-            msg: 'Tag added'
-        });
+    let flag = 0;
+    const listTags = yield tags_1.default.findAll();
+    const tags = listTags.map((tag) => {
+        return tag.toJSON();
+    });
+    for (let tag of tags) {
+        if (tag.tag_name === body.tag_name && tag.tag_detail === body.tag_detail) {
+            flag = 1;
+            console.log("==================================");
+            console.log("La tag existente es:");
+            console.log(tag);
+            console.log("==================================");
+            console.log("La tag a guardar es:");
+            console.log(body);
+            console.log("==================================");
+        }
     }
-    catch (error) {
-        res.json({
-            msg: 'Error adding new tag'
-        });
+    if (flag === 1) {
+        try {
+            res.json({
+                msg: 'Tag already exists.'
+            });
+        }
+        finally {
+            // Nothing to do.
+        }
+    }
+    else {
+        try {
+            yield tags_1.default.create(body);
+            res.json({
+                msg: 'Tag added'
+            });
+        }
+        catch (error) {
+            res.json({
+                msg: 'Error adding new tag'
+            });
+        }
     }
 });
 exports.addTag = addTag;

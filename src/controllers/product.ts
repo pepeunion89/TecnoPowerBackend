@@ -27,26 +27,49 @@ export const getProduct  = async (req: Request, res: Response) => {
 export const addProduct  = async (req: Request, res: Response) => {
 
     const { body } = req;
+    let flag = 0;
+    
+    const listProducts = await Product.findAll();
 
-    console.log(body);
+    const products = listProducts.map((product) => {
+        return product.toJSON();
+    });
 
-    try {
-        await Product.create(body);
-        console.log("LO CREO EN TEORIA");
-
-        res.json({
-            msg: 'Product added'
-            //msg: body
-        })
-    } catch (error) {
-        console.log("NO PAPU NO ENTRO, MIRA EL ERROR: ");
-        console.log("====================================================");
-        console.log(error);
-        console.log("====================================================");
-        res.json({
-            msg:'Error adding new product'
-        })
+    for (let product of products) {
+        if (product.product_name === body.product_name) {
+            flag = 1;
+        }
     }
+
+    if(flag===1){
+
+        try{
+
+            res.json({
+                msg: 'Product already exists.'
+            })
+
+        } finally{
+            // Nothing to do.
+        }
+       
+
+    } else {
+        try {
+            await Product.create(body);
+    
+            res.json({
+                msg: 'Product added'
+                //msg: body
+            })
+        } catch (error) {
+            res.json({
+                msg:'Error adding new product'
+            })
+        }
+    }
+
+    
 }
 
 export const updateProduct  = async (req: Request, res: Response) => {

@@ -27,17 +27,46 @@ export const getMaker  = async (req: Request, res: Response) => {
 export const addMaker  = async (req: Request, res: Response) => {
 
     const { body } = req;
+    let flag = 0;
+    
+    const listMakers = await Maker.findAll();
 
-    try {
-        await Maker.create(body);
+    const makers = listMakers.map((maker) => {
+        return maker.toJSON();
+    });
 
-        res.json({
-            msg: 'Maker added'
-        })
-    } catch (error) {
-        res.json({
-            msg:'Error adding new maker'
-        })
+    for (let maker of makers) {
+        if (maker.maker_name === body.maker_name) {
+            flag = 1;
+        }
+    }
+
+    if(flag===1){
+
+        try{
+
+            res.json({
+                msg: 'Maker already exists.'
+            })
+
+        } finally{
+            // Nothing to do.
+        }
+       
+
+    } else {
+
+        try {
+            await Maker.create(body);
+
+            res.json({
+                msg: 'Maker added'
+            })
+        } catch (error) {
+            res.json({
+                msg:'Error adding new maker'
+            })
+        }
     }
 }
 

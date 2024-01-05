@@ -27,17 +27,53 @@ export const getTag  = async (req: Request, res: Response) => {
 export const addTag  = async (req: Request, res: Response) => {
 
     const { body } = req;
+    let flag = 0;
 
-    try {
-        await Tag.create(body);
+    const listTags = await Tag.findAll();
 
-        res.json({
-            msg: 'Tag added'
-        })
-    } catch (error) {
-        res.json({
-            msg:'Error adding new tag'
-        })
+    const tags = listTags.map((tag) => {
+        return tag.toJSON();
+    });
+
+    for (let tag of tags) {
+        if (tag.tag_name === body.tag_name && tag.tag_detail === body.tag_detail) {
+            flag = 1;
+            console.log("==================================")
+            console.log("La tag existente es:")
+            console.log(tag);
+            console.log("==================================")
+            console.log("La tag a guardar es:")
+            console.log(body);
+            console.log("==================================")
+        }
+    }
+
+    if(flag===1){
+
+        try{
+
+            res.json({
+                msg: 'Tag already exists.'
+            })
+
+        } finally{
+            // Nothing to do.
+        }
+       
+
+    } else {
+
+        try {
+            await Tag.create(body);
+
+            res.json({
+                msg: 'Tag added'
+            })
+        } catch (error) {
+            res.json({
+                msg:'Error adding new tag'
+            })
+        }
     }
 }
 
